@@ -1,0 +1,4 @@
+# ninja log v5
+3	89	7049913631693279	CMakeFiles/Steganography.dir/main.c.obj	7d30552493884cf6
+89	172	7049913632485474	Steganography.exe	3ea2b83b6f0908f1
+4	312	7049983075513257	build.ninja	9641baec63848b84
