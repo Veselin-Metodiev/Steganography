@@ -434,8 +434,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "C:/Magiq/Test/Steganography/cmake-build-debug",
-		"source" : "C:/Magiq/Test/Steganography"
+		"build" : "C:/Magiq/GitHub/steganography/Steganography/cmake-build-debug",
+		"source" : "C:/Magiq/GitHub/steganography/Steganography"
 	},
 	"version" : 
 	{

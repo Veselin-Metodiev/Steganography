@@ -1,4 +1,4 @@
-# Install script for directory: C:/Magiq/Test/Steganography
+# Install script for directory: C:/Magiq/GitHub/steganography/Steganography
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Magiq/Test/Steganography/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Magiq/GitHub/steganography/Steganography/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -16,8 +16,8 @@ int main() {
     printf("For encoding: -e <Message to encode> -i <full path to input file> -o <full path to output file>\n");
     printf("For decoding: -d <name of output file> -i <full path to input file>\n");
 
-    char input[200];
-    fgets(input, 200, stdin);
+    char input[500];
+    fgets(input, 500, stdin);
 
     char msg_to_encode[255];
 
@@ -68,16 +68,16 @@ int main() {
 
         token = strtok(NULL, " ");
 
-        char path[200];
+
         if (token == NULL) {
+            char path[200];
             getcwd(path, 200);
+            path[strlen(path) - 1] = '\0';
+            img_write = fopen(strcat(path, "/outputimage.bmp"), "wb");
         } else {
-            strcpy(path, token);
+            token[strlen(token) - 1] = '\0';
+            img_write = fopen(token, "wb");
         }
-
-        path[strlen(path) - 1] = '\0';
-
-        img_write = fopen(strcat(path, "/outputimage.bmp"), "wb");
 
         if (img_write == NULL) {
             printf("Cannot open output file");
@@ -124,16 +124,30 @@ int main() {
         }
 
         int msg_length = (int) strlen(msg_to_encode);
-        fputc(msg_length, img_write);
 
-        fseek(img_read, (long) header.offset + 1, SEEK_SET);
-        fseek(img_write, (long) header.offset + 1, SEEK_SET);
+        fseek(img_read, (long) header.offset, SEEK_SET);
+        fseek(img_write, (long) header.offset, SEEK_SET);
 
         bool message_encrypted;
         message_encrypted = false;
 
         while (!feof(img_read)) {
             if (!message_encrypted) {
+                for (int i = 1; i <= 32; ++i) {
+                    int length_bit = msg_length >> (32 - i) & 1;
+
+                    int img_num = fgetc(img_read);
+                    int img_lsb = img_num & 1;
+
+                    if (img_lsb != length_bit) {
+                        if (img_num % 2 == 0) {
+                            img_num += 1;
+                        } else {
+                            img_num -= 1;
+                        }
+                    }
+                    fputc(img_num, img_write);
+                }
                 for (int i = 0; i < msg_length; ++i) {
                     char curr_char = msg_to_encode[i];
                     for (int j = 1; j <= 8; ++j) {
@@ -162,7 +176,14 @@ int main() {
         fclose(img_write);
     } else {
         fseek(img_read, (long) header.offset, SEEK_SET);
-        int length = fgetc(img_read);
+        int length;
+
+        for (int i = 1; i <= 32; ++i) {
+            length = length << 1;
+            int img_char = fgetc(img_read);
+            int lsb_bit = img_char & 1;
+            length |= lsb_bit;
+        }
 
         for (int i = 0; i < length; i++) {
             int temp_ch = '\0'; // declaring null character i.e. 0000 0000 ( or 00 hex)
