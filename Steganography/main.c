@@ -1,15 +1,10 @@
-#include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-
-struct BmpHeader {
-    char format[2];
-    unsigned int size;
-    int garbage;
-    unsigned int offset;
-};
+#include "encode.h"
+#include "decode.h"
+#include "common.h"
+#include "bmp.h"
 
 int main() {
     printf("Please enter your input in one of the following patterns:\n");
@@ -19,7 +14,7 @@ int main() {
     char input[500];
     fgets(input, 500, stdin);
 
-    char msg_to_encode[255];
+    char msg_to_encode[500];
 
     char action;
     char *token = strtok(input, " ");
@@ -34,93 +29,102 @@ int main() {
     }
 
     FILE *img_read, *img_write, *output_msg_file;
+    header header;
 
     if (action == 'e') {
         token = strtok(NULL, " ");
 
-        if (strlen(token) > 255) {
-            printf("The message has to be less than 256 characters");
+        if (is_empty_msg(token)) {
+            printf("Please provide a message to be encoded");
             exit(1);
         }
+        token = get_str_without_braces(token);
         strcpy(msg_to_encode, token);
-
         token = strtok(NULL, " ");
 
-        if (strcmp(token, "-i") != 0) {
-            printf("Incorrect input format");
-            exit(1);
-        }
-
-        token = strtok(NULL, " ");
-        img_read = fopen(token, "rb");
-
-        if (img_read == NULL) {
-            printf("Cannot open the input file for encoding");
+        if (!are_equal(token, "-i")) {
+            printf("Please provide the image to be encoded in the following format:");
+            printf("-i <full path to input file>");
             exit(1);
         }
 
         token = strtok(NULL, " ");
 
-        if (strcmp(token, "-o") != 0) {
-            printf("Incorrect input format");
+        img_read = open_file(token, "rb");
+
+        if (!is_valid_file(img_read)) {
+            printf("Could not open the image for encoding");
+            exit(1);
+        }
+
+        header = populate_header(img_read);
+
+        if (!is_valid_img_format(header)) {
+            printf("The program only supports images of BMP format.");
+            exit(1);
+        }
+
+        if (!is_valid_img_size((int)strlen(msg_to_encode), header.size - header.offset)) {
+            printf("The image is too small for the message to be encoded. Please provide a bigger image or a smaller message");
             exit(1);
         }
 
         token = strtok(NULL, " ");
 
+        if (token != NULL) {
+            if (!are_equal(token, "-o")) {
+                printf("Please provide the output image in the following format. If you do not provide it the file will be created in the current directory ");
+                printf("-o <full path to input file>");
+                exit(1);
+            }
 
-        if (token == NULL) {
-            char path[200];
-            getcwd(path, 200);
-            path[strlen(path) - 1] = '\0';
-            img_write = fopen(strcat(path, "/outputimage.bmp"), "wb");
+            token = strtok(NULL, " ");
+
+            img_write = open_file(token, "wb");
+
+            if (!is_valid_file(img_write)) {
+                printf("Could not open or create the output file");
+                exit(1);
+            }
         } else {
-            token[strlen(token) - 1] = '\0';
-            img_write = fopen(token, "wb");
-        }
-
-        if (img_write == NULL) {
-            printf("Cannot open output file");
-            exit(1);
+            img_write = create_output_file();
         }
     } else {
         token = strtok(NULL, " ");
-        char path[20];
-        strcpy(path, token);
-        output_msg_file = fopen(strcat(path, ".txt"), "w");
+        output_msg_file = create_output_msg_file(token);
 
-        if (output_msg_file == NULL) {
-            printf("Cannot open the output file for decoding");
+        token = strtok(NULL, " ");
+
+        if (!are_equal(token, "-i")) {
+            printf("Please provide the image to be encoded in the following format:");
+            printf("-i <full path to input file>");
             exit(1);
         }
 
         token = strtok(NULL, " ");
 
-        if (strcmp(token, "-i") != 0) {
-            printf("Incorrect input format");
+        img_read = open_file(token, "rb");
+
+        if (!is_valid_file(img_read)) {
+            printf("Could not open the image for decoding");
             exit(1);
         }
 
-        token = strtok(NULL, " ");
-        token[strlen(token) - 1] = '\0';
-        img_read = fopen(token, "rb");
+       header = populate_header(img_read);
 
-        if (img_read == NULL) {
-            printf("Cannot open the input file for decoding");
+        if (!is_valid_img_format(header)) {
+            printf("Make sure the image provided is of BMP format");
             exit(1);
         }
     }
 
-    struct BmpHeader header;
-
-    fread(&header.format, 2, 1, img_read);
-    fread(&header.size, 3 * sizeof(int), 1, img_read);
-    rewind(img_read);
-
     if (action == 'e') {
+        copy_header(img_read, img_write, header.offset);
+
         for (int i = 0; i < header.offset; ++i) {
-            int cpy_header = fgetc(img_read);
-            fputc(cpy_header, img_write);
+            int asd = fgetc(img_read);
+            int asds = fgetc(img_write);
+            int b = 23;
         }
 
         int msg_length = (int) strlen(msg_to_encode);
@@ -128,75 +132,16 @@ int main() {
         fseek(img_read, (long) header.offset, SEEK_SET);
         fseek(img_write, (long) header.offset, SEEK_SET);
 
-        bool message_encrypted;
-        message_encrypted = false;
+        encode_msg_length(img_read, img_write, msg_length);
+        encode_msg(img_read, img_write, msg_to_encode);
 
-        while (!feof(img_read)) {
-            if (!message_encrypted) {
-                for (int i = 1; i <= 32; ++i) {
-                    int length_bit = msg_length >> (32 - i) & 1;
-
-                    int img_num = fgetc(img_read);
-                    int img_lsb = img_num & 1;
-
-                    if (img_lsb != length_bit) {
-                        if (img_num % 2 == 0) {
-                            img_num += 1;
-                        } else {
-                            img_num -= 1;
-                        }
-                    }
-                    fputc(img_num, img_write);
-                }
-                for (int i = 0; i < msg_length; ++i) {
-                    char curr_char = msg_to_encode[i];
-                    for (int j = 1; j <= 8; ++j) {
-                        int char_bit = curr_char >> (8 - j) & 1;
-
-                        int img_num = fgetc(img_read);
-                        int img_lsb = img_num & 1;
-
-                        if (img_lsb != char_bit) {
-                            if (img_num % 2 == 0) {
-                                img_num += 1;
-                            } else {
-                                img_num -= 1;
-                            }
-                        }
-                        fputc(img_num, img_write);
-                    }
-                }
-                message_encrypted = true;
-            } else {
-                int img_num = fgetc(img_read);
-                fputc(img_num, img_write);
-            }
-        }
         fclose(img_read);
         fclose(img_write);
     } else {
         fseek(img_read, (long) header.offset, SEEK_SET);
-        int length;
+        int length = get_msg_length(img_read);
 
-        for (int i = 1; i <= 32; ++i) {
-            length = length << 1;
-            int img_char = fgetc(img_read);
-            int lsb_bit = img_char & 1;
-            length |= lsb_bit;
-        }
-
-        for (int i = 0; i < length; i++) {
-            int temp_ch = '\0'; // declaring null character i.e. 0000 0000 ( or 00 hex)
-
-            // Fetching all 8 bits of Image replaced LSB
-            for (int j = 0; j < 8; j++) {
-                temp_ch = temp_ch << 1;
-                int img_char = fgetc(img_read);
-                int lsb_bit = img_char & 1;
-                temp_ch |= lsb_bit;
-            }
-            fputc(temp_ch, output_msg_file);
-        }
+        decode_msg(img_read, output_msg_file, length);
 
         fclose(img_read);
         fclose(output_msg_file);
