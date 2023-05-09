@@ -12,9 +12,8 @@ bool is_valid_img_size(int img_size, unsigned int msg_length) {
 }
 
 FILE *create_output_file() {
-    char path[200];
-    getcwd(path, 200);
-    path[strlen(path) - 1] = '\0';
+    char path[500];
+    getcwd(path, 500);
 
     FILE *output_img;
     output_img = fopen(strcat(path, "/outputimage.bmp"), "wb");
@@ -28,9 +27,9 @@ void copy_header(FILE *img_read, FILE *img_write, int offset) {
     }
 }
 
-void encode_msg_length(FILE *img_read, FILE *img_write, int msg_length) {
-    for (int i = 1; i <= 32; ++i) {
-        int length_bit = msg_length >> (32 - i) & 1;
+void encode_msg_length(FILE *img_read, FILE *img_write, unsigned short msg_length) {
+    for (int i = 1; i <= 16; ++i) {
+        int length_bit = msg_length >> (16 - i) & 1;
 
         int img_num = fgetc(img_read);
         int img_lsb = img_num & 1;

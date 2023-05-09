@@ -4,14 +4,14 @@
 #include "common.h"
 
 FILE *create_output_msg_file(char token[]) {
-    FILE *output_msg_file = fopen(strcat(get_str_without_braces(token), ".txt"), "w");
+    FILE *output_msg_file = fopen(strcat(get_str_without_quotes(token), ".txt"), "w");
     return output_msg_file;
 }
 
-int get_msg_length(FILE *img) {
+unsigned short get_msg_length(FILE *img) {
     int length;
 
-    for (int i = 1; i <= 32; ++i) {
+    for (int i = 1; i <= 16; ++i) {
         length = length << 1;
         int img_char = fgetc(img);
         int lsb_bit = img_char & 1;

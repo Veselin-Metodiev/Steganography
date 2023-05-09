@@ -25,12 +25,12 @@ FILE *open_file(char path[], char mode[]) {
         path[strlen(path) - 1] = '\0';
     }
 
-    path = get_str_without_braces(path);
+    path = get_str_without_quotes(path);
 
     return fopen(path, mode);
 }
 
-char *get_str_without_braces(char str[]) {
+char *get_str_without_quotes(char str[]) {
     char *new_str = calloc(strlen(str) - 1, 1);
 
     for (int i = 0; i < strlen(str) - 2; ++i) {
