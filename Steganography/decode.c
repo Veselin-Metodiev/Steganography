@@ -9,7 +9,7 @@ FILE *create_output_msg_file(char token[]) {
 }
 
 unsigned short get_msg_length(FILE *img) {
-    int length;
+    int length = 0;
 
     for (int i = 1; i <= 16; ++i) {
         length = length << 1;
