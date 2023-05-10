@@ -22,6 +22,7 @@ int main() {
     char *input = malloc(max_input_length);
     if (input == NULL) {
         printf("An error occurred while allocating memory");
+        exit(1)
     }
     gets(input);
     realloc(input, strlen(input) + 1);
