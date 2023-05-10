@@ -30,4 +30,4 @@ To compile and run this project, ensure that you have a C compiler installed on 
 ## Flowchart
 Here is a flowchart of the program:
 
-![Steganography Flowchart](/uploads/6a286279341041d9a1779b8cc32c8927/StegDiagram.png)
+![StegDiagram](/uploads/4cb9863e6883daad1c3110793528e3b9/StegDiagram.png)
