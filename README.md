@@ -11,12 +11,11 @@ Steganography is the art of concealing information within other non-secret data 
 
 ## Usage
 
-1. Place the cover image (the image in which you want to hide the secret message) inside the project directory.
-2. Compile the project:
+1. Compile the project:
 
    ```bash
    gcc steganography.c -o steganography
-3. Simly run the program and an explanation of it's functionality will be printed:
+2. Simly run the program and an explanation of it's functionality will be printed:
 
     ```bash
    ./steganography
