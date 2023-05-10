@@ -26,3 +26,6 @@ Steganography is the art of concealing information within other non-secret data 
 
 ## Requirements
 To compile and run this project, ensure that you have a C compiler installed on your system.
+
+## Flowchart
+Here is a flowchart of the program: !(steganography_logo.png)
