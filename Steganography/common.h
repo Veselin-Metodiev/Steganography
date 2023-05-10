@@ -15,7 +15,7 @@ bool are_equal(char str1[], char str2[]);
 bool is_valid_file(FILE *file);
 
 // Removes the quotes at the beginning and end of a string and returns a pointer to it
-char *get_str_without_quotes(char str[]);
+char *get_str_without_quotes_and_newline(char str[]);
 
 // Removes the "/n" at the end of the path. This occurs if the path was the last argument. Then opens and returns a file from the given path
 FILE *open_file(char path[], char mode[]);

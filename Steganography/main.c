@@ -20,7 +20,7 @@ int main() {
     if (input == NULL) {
         printf("An error occurred while allocating memory");
     }
-    fgets(input, max_input_length, stdin);
+    gets(input);
     realloc(input, strlen(input) + 1);
 
     char action;
@@ -39,6 +39,7 @@ int main() {
     FILE *img_read, *img_write, *output_msg_file;
     header header;
     char *msg_to_encode;
+    char output_path[] = "";
 
     if (action == 'e') {
         // The function stores the original string and each time we call it using NULL it gives us the next token
@@ -48,9 +49,14 @@ int main() {
             printf("Please provide a message to be encoded");
             exit(1);
         }
-        token = get_str_without_quotes(token);
+        token = get_str_without_quotes_and_newline(token);
+        if (are_equal(token, "\"\"") || strlen(token) < 2) {
+            printf("The provided message must be at least 2 characters");
+            exit(1);
+        }
+
         msg_to_encode = malloc(strlen(token) + 1);
-        if (input == NULL) {
+        if (msg_to_encode == NULL) {
             printf("An error occurred while allocating memory");
         }
         strcpy(msg_to_encode, token);
@@ -64,7 +70,6 @@ int main() {
         }
 
         token = strtok(NULL, " ");
-
         img_read = open_file(token, "rb");
 
         if (!is_valid_file(img_read)) {
@@ -79,10 +84,16 @@ int main() {
             exit(1);
         }
 
-        if (!is_valid_img_size((int)strlen(msg_to_encode), header.size - header.offset)) {
+        if (!is_valid_img_size((int) strlen(msg_to_encode), header.size - header.offset)) {
             printf("The image is too small for the message to be encoded. Please provide a bigger image or a smaller message");
             exit(1);
         }
+
+        token = get_str_without_quotes_and_newline(token);
+        // We save the path so later on we can prevent users from using the same path as input and output
+        char *input_path = token;
+        // The output file must be of the same name as the input, so we save it
+        char *file_name = get_file_name(token);
 
         token = strtok(NULL, " ");
 
@@ -95,17 +106,24 @@ int main() {
             }
 
             token = strtok(NULL, " ");
+            token = get_str_without_quotes_and_newline(token);
+            token = strcat(token, "\\");
+            strcpy(output_path, token);
+        }
+        strcat(output_path, file_name);
 
-            img_write = open_file(token, "wb");
-            // We no longer need the input string, so we free it
-            free(input);
+        if (are_equal(input_path, output_path)) {
+            printf("Make sure your input and output directories are different to avoid corrupting the original image");
+            exit(1);
+        }
 
-            if (!is_valid_file(img_write)) {
-                printf("Could not open or create the output file");
-                exit(1);
-            }
-        } else {
-            img_write = create_output_file();
+        img_write = fopen(output_path, "wb");
+        // We no longer need the input string, so we free it
+        free(input);
+
+        if (!is_valid_file(img_write)) {
+            printf("Could not open or create the output file");
+            exit(1);
         }
     } else {
         token = strtok(NULL, " ");
@@ -120,7 +138,6 @@ int main() {
         }
 
         token = strtok(NULL, " ");
-
         img_read = open_file(token, "rb");
         free(input);
 
@@ -129,7 +146,7 @@ int main() {
             exit(1);
         }
 
-       header = populate_header(img_read);
+        header = populate_header(img_read);
 
         if (!is_valid_img_format(header)) {
             printf("Make sure the image provided is of BMP format");
@@ -149,6 +166,9 @@ int main() {
         encode_msg(img_read, img_write, msg_to_encode);
 
         free(msg_to_encode);
+        if (fopen(output_path, "rb") == NULL) {
+            printf("An error occurred while encoding the message");
+        }
         fclose(img_read);
         fclose(img_write);
     } else {

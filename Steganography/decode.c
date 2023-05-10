@@ -4,7 +4,7 @@
 #include "common.h"
 
 FILE *create_output_msg_file(char token[]) {
-    FILE *output_msg_file = fopen(strcat(get_str_without_quotes(token), ".txt"), "w");
+    FILE *output_msg_file = fopen(strcat(get_str_without_quotes_and_newline(token), ".txt"), "w");
     return output_msg_file;
 }
 

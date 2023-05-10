@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <direct.h>
+#include <stdlib.h>
 #include "encode.h"
 
 bool is_valid_img_size(int img_size, unsigned int msg_length) {
@@ -11,13 +12,17 @@ bool is_valid_img_size(int img_size, unsigned int msg_length) {
     return false;
 }
 
-FILE *create_output_file() {
-    char path[500];
-    getcwd(path, 500);
+char *get_file_name(char path[]) {
+    char *new_str = calloc(strlen(path) - 1, 1);
 
-    FILE *output_img;
-    output_img = fopen(strcat(path, "/outputimage.bmp"), "wb");
-    return output_img;
+    for (int i = (int) strlen(path) - 1; i >= 0; --i) {
+        if (path[i] == '\\') {
+            break;
+        }
+        new_str[strlen(path) - 1 - i] = path[i];
+    }
+
+    return strrev(new_str);
 }
 
 void copy_header(FILE *img_read, FILE *img_write, int offset) {

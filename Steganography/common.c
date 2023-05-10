@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include "common.h"
 
 bool is_empty_msg(const char msg[]){
@@ -21,16 +21,15 @@ bool are_equal(char str1[], char str2[]) {
 }
 
 FILE *open_file(char path[], char mode[]) {
-    if (path[strlen(path) - 1] == '\n') {
-        path[strlen(path) - 1] = '\0';
-    }
-
-    path = get_str_without_quotes(path);
+    path = get_str_without_quotes_and_newline(path);
 
     return fopen(path, mode);
 }
 
-char *get_str_without_quotes(char str[]) {
+char *get_str_without_quotes_and_newline(char str[]) {
+    if (str[strlen(str) - 1] == '\n') {
+        str[strlen(str) - 1] = '\0';
+    }
     char *new_str = calloc(strlen(str) - 1, 1);
 
     for (int i = 0; i < strlen(str) - 2; ++i) {

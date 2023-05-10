@@ -8,8 +8,8 @@
 // Checks to see if the file is large enough to store the message
 bool is_valid_img_size(int img_size, unsigned int msg_length);
 
-// Creates the output image file in the current directory if the user doesn't give us one
-FILE *create_output_file();
+// Gets the file name by a given path
+char *get_file_name(char path[]);
 
 // Copies the header of the input image to the output image
 void copy_header(FILE *img_read, FILE *img_write, int offset);
