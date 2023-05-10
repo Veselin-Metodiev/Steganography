@@ -131,6 +131,11 @@ int main() {
         token = strtok(NULL, " ");
         output_msg_file = create_output_msg_file(token);
 
+        if (!is_valid_file(output_msg_file)) {
+            printf("An error occurred while creating the output file");
+            exit(1);
+        }
+
         token = strtok(NULL, " ");
 
         if (!are_equal(token, "-i")) {
