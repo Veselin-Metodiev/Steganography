@@ -6,9 +6,12 @@
 #include "common.h"
 #include "bmp.h"
 
-const int max_input_length = 1000;
+
 
 int main() {
+    const int max_input_length = 1000;
+    const int max_output_path_length = 300;
+
     // Printing the functionality of the program
     printf("Please enter your input as follows:\n");
     printf("For encoding: -e \"Message to encode\" -i \"full path to input file\" -o \"full path to where the output file will be stored\"\n");
@@ -26,6 +29,10 @@ int main() {
     char action;
     // I`m using strtok to split the input into a series of tokens that are separated by space
     char *token = strtok(input, " ");
+    FILE *img_read, *img_write, *output_msg_file;
+    header header;
+    char *msg_to_encode;
+    char *output_path = calloc(max_output_path_length, sizeof (char));
 
     if (strcmp(token, "-e") == 0) {
         action = 'e';
@@ -35,11 +42,6 @@ int main() {
         printf("Incorrect first parameter");
         exit(1);
     }
-
-    FILE *img_read, *img_write, *output_msg_file;
-    header header;
-    char *msg_to_encode;
-    char output_path[] = "";
 
     if (action == 'e') {
         // The function stores the original string and each time we call it using NULL it gives us the next token
@@ -108,7 +110,7 @@ int main() {
             token = strtok(NULL, " ");
             token = get_str_without_quotes_and_newline(token);
             token = strcat(token, "\\");
-            strcpy(output_path, token);
+            output_path = strcpy(output_path, token);
         }
         strcat(output_path, file_name);
 
