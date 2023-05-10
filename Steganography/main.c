@@ -60,6 +60,7 @@ int main() {
         msg_to_encode = malloc(strlen(token) + 1);
         if (msg_to_encode == NULL) {
             printf("An error occurred while allocating memory");
+            exit(1);
         }
         strcpy(msg_to_encode, token);
 
