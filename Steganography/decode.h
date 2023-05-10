@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #ifndef STEGANOGRAPHY_DECODE_H
 #define STEGANOGRAPHY_DECODE_H
 
