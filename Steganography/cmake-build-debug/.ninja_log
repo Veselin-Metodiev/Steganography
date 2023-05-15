@@ -1,14 +1,11 @@
 # ninja log v5
-2	75	7054284701754243	CMakeFiles/Steganography.dir/main.c.obj	f6454b41be35a363
-75	158	7054284702556677	Steganography.exe	34509b6816d71e00
-1	131	7054285229879891	build.ninja	e973dbce39c5bb32
-8	78	7054283992603616	CMakeFiles/Steganography.dir/encode.c.obj	5ffc12f126c36960
-13	87	7054276290913817	CMakeFiles/Steganography.dir/common.c.obj	e6259e26c3ec62bc
-2	65	7054277118914661	CMakeFiles/Steganography.dir/decode.c.obj	6e8f476493757f84
-8	80	7054287177364571	CMakeFiles/Steganography.dir/encode.c.obj	5ffc12f126c36960
-2	82	7054287177374545	CMakeFiles/Steganography.dir/main.c.obj	f6454b41be35a363
-82	166	7054287178196416	Steganography.exe	34509b6816d71e00
-2	252	7054462965794134	CMakeFiles/Steganography.dir/main.c.obj	f6454b41be35a363
-253	385	7054462967115160	Steganography.exe	34509b6816d71e00
-2	89	7054470612837354	CMakeFiles/Steganography.dir/main.c.obj	f6454b41be35a363
-90	181	7054470613717386	Steganography.exe	34509b6816d71e00
+7	196	7055871419504710	CMakeFiles/Steganography.dir/decode.c.obj	a3dc578cd17b437d
+0	286	7055871420399805	CMakeFiles/Steganography.dir/common.c.obj	afb492dd13e5b7dc
+2	227	7055905265047241	CMakeFiles/Steganography.dir/encode.c.obj	6230d70b2872523f
+2	92	7055907538388049	CMakeFiles/Steganography.dir/main.c.obj	b82af832252e07ef
+93	179	7055907539212703	Steganography.exe	8b3e05c952bee7b4
+8	107	7056287029722428	CMakeFiles/Steganography.dir/decode.c.obj	54a26917846ac8d3
+2	112	7056287029773110	CMakeFiles/Steganography.dir/common.c.obj	c83de6152281075d
+17	120	7056287029836588	CMakeFiles/Steganography.dir/encode.c.obj	a2213cae45487ec5
+13	120	7056287029836588	CMakeFiles/Steganography.dir/main.c.obj	11387d82b7014fa1
+121	216	7056287030796645	Steganography.exe	8b3e05c952bee7b4

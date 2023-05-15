@@ -22,6 +22,7 @@ int main() {
     char *input = malloc(max_input_length);
     if (input == NULL) {
         printf("An error occurred while allocating memory");
+        exit(1);
     }
     gets(input);
     realloc(input, strlen(input) + 1);
@@ -60,6 +61,7 @@ int main() {
         msg_to_encode = malloc(strlen(token) + 1);
         if (msg_to_encode == NULL) {
             printf("An error occurred while allocating memory");
+            exit(1);
         }
         strcpy(msg_to_encode, token);
 
@@ -86,7 +88,7 @@ int main() {
             exit(1);
         }
 
-        if (!is_valid_img_size((int) strlen(msg_to_encode), header.size - header.offset)) {
+        if (!is_valid_img_size(header.size - header.offset, (int) strlen(msg_to_encode))) {
             printf("The image is too small for the message to be encoded. Please provide a bigger image or a smaller message");
             exit(1);
         }
@@ -130,6 +132,11 @@ int main() {
     } else {
         token = strtok(NULL, " ");
         output_msg_file = create_output_msg_file(token);
+
+        if (!is_valid_file(output_msg_file)) {
+            printf("An error occurred while creating the output file");
+            exit(1);
+        }
 
         token = strtok(NULL, " ");
 
