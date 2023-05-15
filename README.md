@@ -6,7 +6,7 @@ Steganography is the art of concealing information within other non-secret data 
 
 ## Features
 
-- **Image Encoding:** Encode a secret message within an image by modifying the least significant bit of each pixel.
+- **Image Encoding:** Encode a secret message within an image by modifying the least significant bit of each pixel. Only supports BMP images.
 - **Image Decoding:** Extract hidden messages from encoded images by analyzing the least significant bit of each pixel.
 
 ## Usage
