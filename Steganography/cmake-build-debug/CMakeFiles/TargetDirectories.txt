@@ -1,3 +1,0 @@
-C:/Magiq/GitHub/steganography/Steganography/cmake-build-debug/CMakeFiles/Steganography.dir
-C:/Magiq/GitHub/steganography/Steganography/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Magiq/GitHub/steganography/Steganography/cmake-build-debug/CMakeFiles/rebuild_cache.dir
