@@ -11,14 +11,14 @@ Steganography is the art of concealing information within other non-secret data 
 
 ## Usage
 
-1. Compile the project:
+1. Navigate to cmake-build-debug
 
    ```bash
-   gcc steganography.c -o steganography
+   cd (your path)/Steganography/cmake-build-debug
 2. Simly run the program and an explanation of it's functionality will be printed:
 
     ```bash
-   ./steganography
+   ./Steganography
    Please enter your input as follows:
    For encoding: -e "Message to encode" -i "full path to input file" -o "full path to where the output file will be stored"
    *Note: if you don`t specify the output path the file will be created in your current directory
