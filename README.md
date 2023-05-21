@@ -21,7 +21,7 @@ Steganography is the art of concealing information within other non-secret data 
    ./Steganography
    Please enter your input as follows:
    For encoding: -e "Message to encode" -i "full path to input file" -o "full path to where the output file will be stored"
-   *Note: if you don`t specify the output path the file will be created in your current directory
+   *Note: if you don't specify the output path the file will be created in your current directory
    For decoding: -d "name of output file" -i "full path to input file"
 
 ## Requirements
@@ -30,4 +30,4 @@ To compile and run this project, ensure that you have a C compiler installed on 
 ## Flowchart
 Here is a flowchart of the program:
 
-![StegDiagram](/uploads/4cb9863e6883daad1c3110793528e3b9/StegDiagram.png)
+![StegDiagram](https://github.com/Veselin-Metodiev/Steganography/assets/109075090/76ca4df3-6e29-4025-bf6a-1e700131412b)
